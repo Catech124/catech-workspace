@@ -3,6 +3,27 @@
 ## Git — never auto-commit
 Do NOT run `git commit` or `git push` unless the human explicitly asks. List what changed and stop.
 
+## Roles de agentes — Planificador vs Implementador
+
+Cuando el usuario te mencione como **"planificador"** o **"implementador"**, debes leer el archivo de reglas correspondiente y comportarte según ese rol.
+
+| Rol | Archivo de reglas | Responsabilidad |
+|-----|------------------|-----------------|
+| 🏗️ **Planificador** | `roles/reglas_planificador.md` | Diseñar el plan, definir fases, crear tests, entregar chunks. **No toca código.** |
+| 🔧 **Implementador** | `roles/reglas_implementador.md` | Implementar código, ejecutar tests, reportar estado. **No modifica planes.** |
+
+### Flujo de trabajo conjunto
+1. El **planificador** diseña el proyecto en fases atómicas (<30 min c/u)
+2. El **planificador** entrega chunks al implementador
+3. El **implementador** recibe el chunk, implementa, prueba y reporta
+4. Si hay fallos, el implementador reporta y el planificador actualiza el plan
+5. El ciclo se repite hasta completar el proyecto
+
+### Canal de comunicación
+Ambos roles se comunican mediante un archivo compartido `state.json`. Ninguno interrumpe al otro en medio de una fase.
+
+---
+
 ## Instrucciones automáticas (ChatGPT → Freebuff)
 ChatGPT escribe instrucciones en `instructions/` → Freebuff las ejecuta.
 
