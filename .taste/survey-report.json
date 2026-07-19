@@ -1,0 +1,1087 @@
+{
+  "packageManager": {
+    "detected": "unknown",
+    "confidence": 0.3,
+    "evidence": "no lock file found"
+  },
+  "testFramework": {
+    "detected": "vitest",
+    "confidence": 0.85,
+    "evidence": "package.json (frontend) has vitest"
+  },
+  "bundler": {
+    "detected": "none (vanilla ES modules)",
+    "confidence": 0.9,
+    "evidence": "<script type=\"module\"> detected in benchmark-workerpool.html"
+  },
+  "indentation": {
+    "detected": "1 spaces",
+    "confidence": 0.85,
+    "evidence": "1-space indent in 6 files"
+  },
+  "codeStyle": {
+    "semicolons": "semicolons",
+    "quotes": "single",
+    "templateLiterals": 125,
+    "evidence": "semi: semicolons (1103/1242), quotes: single (S:2340 D:421 T:125)"
+  },
+  "schemaNodes": {
+    "schemaVersion": "2.0.0",
+    "nodeTypes": [],
+    "categoryCount": 8,
+    "totalNodes": 11,
+    "nodeDefinitions": [
+      {
+        "key": "background",
+        "name": "Fondo",
+        "category": "generator",
+        "supportsMask": false,
+        "paramCount": 5,
+        "inputCount": 0
+      },
+      {
+        "key": "image_source",
+        "name": "Imagen",
+        "category": "source",
+        "supportsMask": false,
+        "paramCount": 4,
+        "inputCount": 0
+      },
+      {
+        "key": "video_source",
+        "name": "Video",
+        "category": "source",
+        "supportsMask": false,
+        "paramCount": 6,
+        "inputCount": 0
+      },
+      {
+        "key": "text_source",
+        "name": "Texto",
+        "category": "generator",
+        "supportsMask": true,
+        "paramCount": 9,
+        "inputCount": 0
+      },
+      {
+        "key": "compositor_merge",
+        "name": "Merge",
+        "category": "compositor",
+        "supportsMask": true,
+        "paramCount": 7,
+        "inputCount": 2
+      },
+      {
+        "key": "transform_2d",
+        "name": "Transform",
+        "category": "transform",
+        "supportsMask": false,
+        "paramCount": 7,
+        "inputCount": 1
+      },
+      {
+        "key": "blur_effect",
+        "name": "Blur",
+        "category": "filter",
+        "supportsMask": false,
+        "paramCount": 5,
+        "inputCount": 1
+      },
+      {
+        "key": "brightness_contrast",
+        "name": "Brillo/Contraste",
+        "category": "color",
+        "supportsMask": false,
+        "paramCount": 5,
+        "inputCount": 1
+      },
+      {
+        "key": "morph_text",
+        "name": "Morph Text",
+        "category": "animation",
+        "supportsMask": false,
+        "paramCount": 4,
+        "inputCount": 1
+      },
+      {
+        "key": "display",
+        "name": "Display",
+        "category": "output",
+        "supportsMask": false,
+        "paramCount": 0,
+        "inputCount": 1
+      },
+      {
+        "key": "video_output",
+        "name": "Render Final",
+        "category": "output",
+        "supportsMask": false,
+        "paramCount": 8,
+        "inputCount": 1
+      }
+    ],
+    "nodeDefinitionCount": 11,
+    "nodeCategories": [
+      "generator",
+      "source",
+      "compositor",
+      "transform",
+      "filter",
+      "color",
+      "animation",
+      "output"
+    ],
+    "nodeCategoryCount": 8,
+    "portTypes": [
+      {
+        "name": "video_stream",
+        "description": "Conexión de flujo de video/imagen (Canvas/ImageData RGBA, resolución definida en metadata.resolution).",
+        "maxConnections": 1,
+        "compatibleTypes": [
+          "video_stream",
+          "image"
+        ]
+      },
+      {
+        "name": "mask",
+        "description": "Conexión de máscara de efecto (Effect Mask) — canal alpha en escala de grises.",
+        "maxConnections": 1,
+        "compatibleTypes": [
+          "mask"
+        ]
+      }
+    ],
+    "portTypeCount": 2,
+    "propertyTypes": [
+      {
+        "name": "string",
+        "widget": "text",
+        "required": []
+      },
+      {
+        "name": "number",
+        "widget": "number",
+        "required": []
+      },
+      {
+        "name": "range",
+        "widget": "slider",
+        "required": [
+          "min",
+          "max",
+          "step"
+        ]
+      },
+      {
+        "name": "color",
+        "widget": "color-picker",
+        "required": []
+      },
+      {
+        "name": "boolean",
+        "widget": "toggle",
+        "required": []
+      },
+      {
+        "name": "select",
+        "widget": "dropdown",
+        "required": [
+          "options"
+        ]
+      },
+      {
+        "name": "media",
+        "widget": "file-picker",
+        "required": [
+          "mediaType"
+        ]
+      }
+    ],
+    "propertyTypeCount": 7,
+    "hasAnimationSystem": true,
+    "animationChannels": true,
+    "animationModifiers": [
+      "description",
+      "oscillate",
+      "shake"
+    ],
+    "hasRenderPipeline": true,
+    "pipelineSteps": [
+      "TopologicalSort",
+      "EvaluateKeyframes",
+      "ProcessNodesCached",
+      "ApplyEffectMasks",
+      "ApplyGlobalEffects",
+      "RenderDisplay"
+    ],
+    "hasCaching": true,
+    "hasLayerModel": true,
+    "layerFields": [
+      "id",
+      "start",
+      "duration",
+      "hidden",
+      "locked"
+    ],
+    "hasGlobalEffects": true,
+    "globalEffectParams": [
+      "noise",
+      "noiseOpacity",
+      "noiseSpeed",
+      "scanlines",
+      "vignette",
+      "glitch",
+      "blur",
+      "saturation",
+      "hueRotate"
+    ],
+    "hasDataFlow": true,
+    "dataFlowRules": 11,
+    "hasMediaTypes": true,
+    "mediaTypeFormats": [
+      "image:png",
+      "image:jpg",
+      "image:jpeg",
+      "image:webp",
+      "image:gif",
+      "image:svg",
+      "image:bmp",
+      "video:mp4",
+      "video:webm",
+      "video:ogg",
+      "video:mov",
+      "video:mkv",
+      "video:m4v",
+      "video:avi",
+      "audio:mp3",
+      "audio:wav",
+      "audio:ogg",
+      "audio:flac",
+      "audio:aac",
+      "audio:m4a",
+      "audio:wma"
+    ],
+    "blendModeCount": 12,
+    "easingFunctionCount": 5,
+    "hasUIDefaults": true,
+    "uiDefaultKeys": [
+      "nodeMinWidth",
+      "nodeDefaultWidth",
+      "nodeHeaderHeight",
+      "nodePortHeight",
+      "timelineDefaultZoomPPS",
+      "timelineZoomRangePPS",
+      "gridAutoLayoutX",
+      "gridAutoLayoutY",
+      "minimapWidth",
+      "minimapHeight",
+      "viewportZoomMin",
+      "viewportZoomMax",
+      "viewportZoomStep",
+      "wireBezierOffsetRatio",
+      "previewCanvasWidth",
+      "previewCanvasHeight"
+    ],
+    "evidenceParts": [
+      "11 node definitions in 8 categories",
+      "2 port types",
+      "7 property types (string, number, range, color, boolean, select, media)",
+      "animation system with 3 modifier types",
+      "render pipeline: 6 steps",
+      "layer model: 5 fields",
+      "9 global effects",
+      "11 data flow rules",
+      "3 media types",
+      "12 blend modes"
+    ],
+    "evidence": "11 node definitions in 8 categories | 2 port types | 7 property types (string, number, range, color, boolean, select, media) | animation system with 3 modifier types | render pipeline: 6 steps | layer model: 5 fields | 9 global effects | 11 data flow rules | 3 media types | 12 blend modes"
+  },
+  "nodeEngine": {
+    "categories": {
+      "source": [
+        "background",
+        "image",
+        "text",
+        "video",
+        "loader"
+      ],
+      "generate": [
+        "svg",
+        "rectangle",
+        "ellipse",
+        "polygon",
+        "gradient",
+        "grid",
+        "fast-noise",
+        "procedural-shapes",
+        "text-plus"
+      ],
+      "composite": [
+        "merge"
+      ],
+      "transform": [
+        "transform"
+      ],
+      "blur": [
+        "blur",
+        "directional-blur",
+        "defocus"
+      ],
+      "color": [
+        "colorgrade",
+        "hue-saturation",
+        "color-curves"
+      ],
+      "effects": [
+        "noise",
+        "scanlines",
+        "vignette",
+        "glitch",
+        "glow",
+        "sharpen",
+        "soft-glow",
+        "pixelate"
+      ],
+      "output": [
+        "output"
+      ],
+      "keyer": [
+        "luma-keyer",
+        "delta-keyer",
+        "chroma-keyer",
+        "hsl-qualifier",
+        "magic-mask"
+      ],
+      "mask": [
+        "mask-rectangle",
+        "mask-ellipse",
+        "erode-dilate",
+        "matte-control",
+        "blur-matte",
+        "bitmap-matte-evaluator"
+      ],
+      "distort": [
+        "displacement",
+        "corner-position",
+        "lens-distort",
+        "ripple",
+        "stabilize",
+        "tracker"
+      ],
+      "channel": [
+        "channel-boolean",
+        "channel-shuffle"
+      ],
+      "3d": [
+        "shape-3d",
+        "text-3d",
+        "image-plane-3d",
+        "camera-3d",
+        "merge-3d",
+        "renderer-3d"
+      ]
+    },
+    "totalNodes": 56,
+    "categoriesCount": 13,
+    "maskInputCount": 51,
+    "maskInputRatio": 0.9107142857142857,
+    "generatorCount": 14,
+    "effectCount": 35,
+    "evidence": "56 tipos en 13 categorías, 51 con maskInput, 14 generadores"
+  },
+  "animation": {
+    "keyframeAPI": true,
+    "modifierAPI": true,
+    "animatedPropsAPI": true,
+    "propColorsCount": 28,
+    "defaultRangesCount": 20,
+    "easingTypes": [
+      "linear",
+      "easeIn",
+      "easeOut",
+      "easeInOut",
+      "bezier"
+    ],
+    "modifierTypes": [
+      "oscillate",
+      "shake",
+      "step"
+    ],
+    "animatableLayerTypes": [
+      "text",
+      "image",
+      "video"
+    ],
+    "evalPropNodeTypes": [
+      "image",
+      "text",
+      "loader",
+      "rectangle",
+      "ellipse",
+      "polygon",
+      "gradient",
+      "grid",
+      "fast-noise",
+      "procedural-shapes",
+      "text-plus"
+    ],
+    "hasSplineView": true,
+    "hasEvalPropInEngine": false,
+    "hasFramePipeline": true,
+    "totalPropColors": 28,
+    "propColorEntries": {
+      "size": "#ffcc44",
+      "y": "#66dd88",
+      "x": "#7a9eff",
+      "brightness": "#7a9eff",
+      "contrast": "#dd8844",
+      "spacing": "#9966dd",
+      "opacity": "#ff6688",
+      "saturate": "#44ddaa",
+      "hue": "#ff66aa",
+      "cx": "#7a9eff",
+      "cy": "#66dd88",
+      "rx": "#ffcc44",
+      "ry": "#ff6688",
+      "radius": "#dd8844",
+      "rotation": "#44ddaa",
+      "angle": "#44ddaa",
+      "scale": "#9966dd",
+      "gain": "#ff66aa",
+      "tracking": "#44ddff",
+      "width": "#ff8844",
+      "height": "#ff4488",
+      "columns": "#44ddaa",
+      "rows": "#66bbff",
+      "gap": "#9977dd",
+      "lineWidth": "#ffbb44",
+      "seed": "#dd88ff",
+      "time": "#88ddff",
+      "default": "#aaaaaa"
+    },
+    "evidenceParts": [
+      "timeline-controller.js: keyframe+modifier+animatedProps API",
+      "spline-view.js: Fusion-style spline editor with bezier handles",
+      "state.js: animationChannels store",
+      "state.js: modifiers store",
+      "state.js: animatedProps store",
+      "engine.js: evalProp + renderFrame pipeline",
+      "engine-generators.js: 53 evalPropA calls across 11 node types"
+    ],
+    "evidence": "keyframeAPI: true | modifierAPI: true | animatedPropsAPI: true | propColors: 28 | defaultRanges: 20 | easingTypes: linear,easeIn,easeOut,easeInOut,bezier | splineView: true | evalPropNodeTypes: 11 | timeline-controller.js: keyframe+modifier+animatedProps API | spline-view.js: Fusion-style spline editor with bezier handles | state.js: animationChannels store | state.js: modifiers store | state.js: animatedProps store | engine.js: evalProp + renderFrame pipeline | engine-generators.js: 53 evalPropA calls across 11 node types"
+  },
+  "exportFormats": {
+    "formats": [
+      "WebM (MediaRecorder)",
+      "MP4 (FFmpeg.wasm)",
+      "PNG sequence",
+      "JPEG sequence",
+      "GIF (LZW encoder inline)"
+    ],
+    "hasStandaloneEngine": true,
+    "hasHTMLExport": false,
+    "hasZIPExport": true,
+    "hasYouTubeImport": true,
+    "hasSceneDetection": true,
+    "defaultResolution": "1920x1080",
+    "defaultFPS": 30,
+    "methods": [
+      "ZIP (ZipWriter store-mode)",
+      "YouTube import (backend API)",
+      "Scene detection (FFmpeg.wasm)",
+      "Standalone engine (.toString() serialization)"
+    ],
+    "evidenceParts": [
+      "main.js: 5 formats, FPS 30, res 1920x1080",
+      "engine.js: standalone engine export available"
+    ],
+    "evidence": "main.js: 5 formats, FPS 30, res 1920x1080 | engine.js: standalone engine export available"
+  },
+  "uiEvents": {
+    "eventBindingPattern": "DOMContentLoaded + querySelector",
+    "domReadyListeners": 47,
+    "delegationListeners": 22,
+    "storeEventSubscriptions": 0,
+    "hasToolbarEvents": true,
+    "hasViewSwitcher": true,
+    "hasProjectDialog": true,
+    "hasTimelineControls": true,
+    "hasCopilotPanel": true,
+    "hasContextMenu": true,
+    "hasExportModal": true,
+    "hasFilePicker": true,
+    "hasCollapseToggles": true,
+    "hasNodeZoom": true,
+    "zoomRange": "0.2–3.0x",
+    "hasNodePan": true,
+    "panButton": "middle-button (mouse button 1)",
+    "hasWireRendering": true,
+    "wireRoleColors": [
+      "bg -> gold (#d4a017)",
+      "fg -> green (#4caf50)",
+      "mask -> blue (#3b82f6)",
+      "matte -> yellow (#fc0)"
+    ],
+    "hasNodeIndicators": true,
+    "nodeIndicatorTypes": [
+      "Node Sizing (⊞)",
+      "Key palette (🔑)",
+      "Color wheels (●)",
+      "Curves (∿)",
+      "Qualifier (◑)",
+      "Blur/Sharpen (◎)"
+    ],
+    "hasWireInsert": true,
+    "hasConnectionDrag": true,
+    "hasViewerDots": true,
+    "hasDynamicPortPositioning": true,
+    "hasSvgBadge": true,
+    "hasNodeDrag": true,
+    "hasMultiDrag": true,
+    "hasMarqueeSelection": true,
+    "hasConnHoverHighlight": true,
+    "hasAutoMerge": true,
+    "hasAutoConnect": true,
+    "hasMediaDragDrop": true,
+    "hasPasteImport": true,
+    "hasFloatingPreview": true,
+    "hasDynamicToolbar": true,
+    "hasEscapeClose": true,
+    "keyboardShortcuts": [
+      "Delete (Remove node)",
+      "1 (Timeline view)",
+      "2 (Nodes view)"
+    ],
+    "evidenceParts": [
+      "ui_events.js: 47 event listeners",
+      "node-graph.js: zoom/pan/wires/indicators/connections",
+      "node-view.js: drag/selection/merge/media/toolbar",
+      "main.js: 3 keyboard shortcuts",
+      "6 UI domains, 6 node graph interactions, 3 shortcuts"
+    ],
+    "evidence": "ui_events.js: 47 event listeners | node-graph.js: zoom/pan/wires/indicators/connections | node-view.js: drag/selection/merge/media/toolbar | main.js: 3 keyboard shortcuts | 6 UI domains, 6 node graph interactions, 3 shortcuts"
+  },
+  "renderPipeline": {
+    "engineFiles": [
+      "engine-effects.js",
+      "engine-distortion.js",
+      "engine-masks.js",
+      "engine-3d.js",
+      "engine-generators.js"
+    ],
+    "rendererDispatch": [
+      {
+        "renderer": "renderEffectNode",
+        "types": [
+          "merge",
+          "transform",
+          "blur",
+          "colorgrade",
+          "noise",
+          "scanlines",
+          "vignette",
+          "glitch",
+          "directional-blur",
+          "glow",
+          "luma-keyer",
+          "hue-saturation",
+          "color-curves",
+          "delta-keyer",
+          "chroma-keyer",
+          "hsl-qualifier",
+          "magic-mask",
+          "sharpen",
+          "defocus",
+          "soft-glow",
+          "pixelate",
+          "erode-dilate"
+        ]
+      },
+      {
+        "renderer": "renderDistortionNode",
+        "types": [
+          "displacement",
+          "corner-position",
+          "lens-distort",
+          "ripple",
+          "stabilize",
+          "tracker"
+        ]
+      },
+      {
+        "renderer": "renderMaskNode",
+        "types": [
+          "channel-boolean",
+          "channel-shuffle",
+          "matte-control",
+          "blur-matte",
+          "bitmap-matte-evaluator",
+          "mask-rectangle",
+          "mask-ellipse"
+        ]
+      },
+      {
+        "renderer": "render3dNode",
+        "types": [
+          "shape-3d",
+          "text-3d",
+          "image-plane-3d",
+          "camera-3d",
+          "merge-3d",
+          "renderer-3d"
+        ]
+      }
+    ],
+    "pipelineStages": [
+      "Effect Mask (inputGain + destination-in)",
+      "Node Sizing (zoom/pan/rotate/flip/crop)",
+      "Power Window (circle/rectangle/polygon/gradient)",
+      "Output Gain (blend with original)"
+    ],
+    "hasStaticNodeCache": true,
+    "hasCanvasPool": true,
+    "hasImageDataPool": true,
+    "hasPowerWindow": true,
+    "hasNodeSizing": true,
+    "hasOutputGain": true,
+    "hasEffectMask": true,
+    "nodeCount": {
+      "effect": 22,
+      "distortion": 6,
+      "mask": 7,
+      "3d": 6,
+      "generator": 0
+    },
+    "totalNodesByRenderer": 41,
+    "evidenceParts": [
+      "engine-3d.js: 6 node types with _3dRasterize pipeline",
+      "4 renderers, 4 pipeline stages"
+    ],
+    "evidence": "engine-3d.js: 6 node types with _3dRasterize pipeline | 4 renderers, 4 pipeline stages"
+  },
+  "persistence": {
+    "hasLocalStorage": true,
+    "localStorageKeys": [
+      {
+        "name": "STORAGE_KEY",
+        "value": "arc-editor-project"
+      },
+      {
+        "name": "PROJECT_MANIFEST_KEY",
+        "value": "arc-editor-manifest"
+      },
+      {
+        "name": "PROJECT_PREFIX",
+        "value": "arc-project-"
+      }
+    ],
+    "hasManifest": true,
+    "hasAutoSave": true,
+    "autoSaveDelay": 500,
+    "hasUndoRedo": true,
+    "maxHistory": 50,
+    "hasBatchOps": true,
+    "hasFSAA": true,
+    "fsaaMethods": [
+      "isFSAvailable",
+      "pickSaveDirectory",
+      "pickLoadDirectory",
+      "saveProjectToDir",
+      "loadProjectFromDir",
+      "ensureAssetsDir",
+      "copyFileToAssets",
+      "readAsset",
+      "listAssets",
+      "getDirDisplayName"
+    ],
+    "hasBackendAPI": true,
+    "backendAPIEndpoints": [
+      "saveProject",
+      "loadProject",
+      "listProjects",
+      "deleteProject"
+    ],
+    "hasProjectDialog": true,
+    "hasMediaPool": true,
+    "hasYouTubeImport": true,
+    "persistenceMethods": [
+      "localStorage.saveToStorage()",
+      "localStorage.loadFromStorage()",
+      "localStorage.clearStorage()",
+      "localStorage.hasSavedProject()",
+      "localStorage.saveProjectAs()",
+      "localStorage.loadProjectByName()",
+      "localStorage.listProjects()",
+      "localStorage.deleteProject()",
+      "localStorage.getCurrentProjectName()",
+      "localStorage.onProjectNameChange()",
+      "File System Access API (project.json + assets/)"
+    ],
+    "evidenceParts": [
+      "state.js: localStorage persistence + undo/redo system",
+      "project-fs.js: 10 FSAA methods",
+      "main.js: backend API + disk save/load + project dialog",
+      "11 persistence methods: localStorage.saveToStorage(), localStorage.loadFromStorage(), localStorage.clearStorage(), localStorage.hasSavedProject(), localStorage.saveProjectAs(), localStorage.loadProjectByName(), localStorage.listProjects(), localStorage.deleteProject(), localStorage.getCurrentProjectName(), localStorage.onProjectNameChange(), File System Access API (project.json + assets/)"
+    ],
+    "evidence": "state.js: localStorage persistence + undo/redo system | project-fs.js: 10 FSAA methods | main.js: backend API + disk save/load + project dialog | 11 persistence methods: localStorage.saveToStorage(), localStorage.loadFromStorage(), localStorage.clearStorage(), localStorage.hasSavedProject(), localStorage.saveProjectAs(), localStorage.loadProjectByName(), localStorage.listProjects(), localStorage.deleteProject(), localStorage.getCurrentProjectName(), localStorage.onProjectNameChange(), File System Access API (project.json + assets/)"
+  },
+  "designTokens": {
+    "hasDesignTokens": true,
+    "tokenCategories": [
+      {
+        "file": "animation.json",
+        "category": "animation",
+        "tokenCount": 13,
+        "subCategories": [
+          "duration",
+          "easing"
+        ],
+        "subCategoryCount": 2
+      },
+      {
+        "file": "border.json",
+        "category": "border",
+        "tokenCount": 10,
+        "subCategories": [
+          "radius",
+          "width"
+        ],
+        "subCategoryCount": 2
+      },
+      {
+        "file": "breakpoint.json",
+        "category": "breakpoint",
+        "tokenCount": 6,
+        "subCategoryCount": 0
+      },
+      {
+        "file": "color.json",
+        "category": "color",
+        "tokenCount": 28,
+        "subCategories": [
+          "primary",
+          "neutral",
+          "text"
+        ],
+        "subCategoryCount": 3
+      },
+      {
+        "file": "opacity.json",
+        "category": "opacity",
+        "tokenCount": 12,
+        "subCategoryCount": 0
+      },
+      {
+        "file": "shadow.json",
+        "category": "shadow",
+        "tokenCount": 4,
+        "subCategoryCount": 0
+      },
+      {
+        "file": "sizing.json",
+        "category": "sizing",
+        "tokenCount": 16,
+        "subCategories": [
+          "icon",
+          "avatar",
+          "input",
+          "container"
+        ],
+        "subCategoryCount": 4
+      },
+      {
+        "file": "spacing.json",
+        "category": "spacing",
+        "tokenCount": 13,
+        "subCategoryCount": 0
+      },
+      {
+        "file": "typography.json",
+        "category": "font",
+        "tokenCount": 23,
+        "subCategories": [
+          "family",
+          "size",
+          "weight",
+          "lineHeight"
+        ],
+        "subCategoryCount": 4
+      },
+      {
+        "file": "z-index.json",
+        "category": "z",
+        "tokenCount": 10,
+        "subCategories": [
+          "index"
+        ],
+        "subCategoryCount": 1
+      }
+    ],
+    "tokenCategoryCount": 10,
+    "totalTokens": 135,
+    "styleDictionaryVersion": "^5.4.4",
+    "outputFormats": [],
+    "hasBuiltOutput": true,
+    "hasFigmaIntegration": true,
+    "figmaProvider": "github",
+    "tokenDetails": [],
+    "evidenceParts": [
+      "10 token categories (135 total tokens)",
+      "Style Dictionary ^5.4.4",
+      "0 output platforms: ",
+      "built output detected in dist/",
+      "Figma integration (Tokens Studio, provider: github)"
+    ],
+    "evidence": "10 token categories (135 total tokens) | Style Dictionary ^5.4.4 | 0 output platforms:  | built output detected in dist/ | Figma integration (Tokens Studio, provider: github)"
+  },
+  "testingPatterns": {
+    "hasNodeCompositionTest": true,
+    "hasIntegrationTest": true,
+    "iifeWrapped": true,
+    "browserInjected": true,
+    "consoleErrorInterception": true,
+    "testFunctions": [
+      "testSingleNode",
+      "testWithBG",
+      "testDualInput",
+      "testChain",
+      "test3DChain",
+      "testWithTimeout"
+    ],
+    "testCount": "runtime (tracked in results)",
+    "sourceNodeCount": 11,
+    "effectNodeCount": 28,
+    "chainCount": 15,
+    "dualInputCount": 3,
+    "hasEditorAccess": true,
+    "hasStoreAccess": true,
+    "resultsStorage": "window.__nodeTestResults",
+    "errorInterceptionMethods": [
+      "console.error capture",
+      "console.warn capture (Engine: prefix filter)"
+    ],
+    "nodeTypesTested": [
+      "background",
+      "ellipse",
+      "rectangle",
+      "polygon",
+      "gradient",
+      "grid",
+      "fast-noise",
+      "text-plus",
+      "mask-rectangle",
+      "mask-ellipse",
+      "svg",
+      "blur",
+      "colorgrade",
+      "noise",
+      "scanlines",
+      "vignette",
+      "glitch",
+      "transform",
+      "luma-keyer",
+      "hue-saturation",
+      "color-curves",
+      "delta-keyer",
+      "chroma-keyer",
+      "hsl-qualifier",
+      "sharpen",
+      "defocus",
+      "soft-glow",
+      "pixelate",
+      "erode-dilate",
+      "channel-shuffle",
+      "matte-control",
+      "blur-matte",
+      "bitmap-matte-evaluator",
+      "corner-position",
+      "lens-distort",
+      "ripple",
+      "stabilize",
+      "tracker",
+      "directional-blur"
+    ],
+    "playwrightFramework": true,
+    "testPhases": [
+      "Static ID verification",
+      "data-action attribute verification",
+      "data-toggle attribute verification",
+      "Interactive behavior tests",
+      "Console error audit"
+    ],
+    "phaseCount": 5,
+    "staticIdCount": 107,
+    "dataActionCount": 22,
+    "interactiveTestCount": 9,
+    "consoleErrorCollector": true,
+    "serverStartupRetry": true,
+    "checkFunctionPattern": "check(label, condition, detail)",
+    "vitestConfig": true,
+    "vitestEnvironment": "happy-dom",
+    "vitestSetupFile": "./test/setup.js",
+    "vitestTimeout": 10000,
+    "evidenceParts": [
+      "node_composition_test.js: 6 test functions, 11 source + 28 effect nodes",
+      "integration_test.js: 5 phases, 107 static IDs, 22 data-actions, 9 interactive tests",
+      "vitest.config.js: happy-dom env, 10000ms timeout"
+    ],
+    "evidence": "node_composition_test.js: 6 test functions, 11 source + 28 effect nodes | integration_test.js: 5 phases, 107 static IDs, 22 data-actions, 9 interactive tests | vitest.config.js: happy-dom env, 10000ms timeout"
+  },
+  "copilotPatterns": {
+    "hasCopilotJS": true,
+    "esModuleImports": [
+      "Store (from ./state.js)",
+      "EVENTS (from ./state.js)",
+      "addNode (from ./node-controller.js)",
+      "removeNode (from ./node-controller.js)",
+      "addConnection (from ./node-controller.js)",
+      "autoLayout (from ./node-controller.js)",
+      "removeAllNodes (from ./node-controller.js)",
+      "selectNode (from ./node-controller.js)",
+      "renderGraph (from ./node-view.js)",
+      "updateNodeProps (from ./node-view.js)"
+    ],
+    "apiEndpoint": "location.origin || localhost:8765",
+    "chatPersistence": true,
+    "hasLocalStorageKeys": true,
+    "localStorageKeys": [
+      "cpPanelW",
+      "cpPanelH",
+      "cpPanelLeft",
+      "cpPanelTop",
+      "cpFontSize",
+      "cpModel",
+      "cpHistory",
+      "cpMessages"
+    ],
+    "hasPanelSystem": true,
+    "hasSkillsSystem": true,
+    "skillCount": 6,
+    "skillNames": [
+      "ayuda",
+      "limpiar",
+      "reset",
+      "explosion",
+      "introvideo",
+      "cinema"
+    ],
+    "hasModelSelector": true,
+    "modelProviderCount": 24,
+    "hasFontSizeControl": true,
+    "panelDraggable": true,
+    "hasResizeObserver": true,
+    "hasHealthCheck": true,
+    "hasModelAPI": true,
+    "hasChatAPI": true,
+    "modelLoadingFallback": true,
+    "hasBuildContext": true,
+    "hasBuildGraphContext": true,
+    "hasCommandExecution": true,
+    "supportedActions": [
+      "addNode",
+      "setProp",
+      "connect",
+      "deleteNode",
+      "autoLayout"
+    ],
+    "hasAutoLayout": true,
+    "hasMarkdownRendering": true,
+    "hasEventDelegation": true,
+    "hasContextTracking": true,
+    "hasInputAutoResize": true,
+    "hasKeyboardShortcuts": true,
+    "evidenceParts": [
+      "copilot.js: 10 imports, 6 skills, 24 providers, 5 actions"
+    ],
+    "evidence": "copilot.js: 10 imports, 6 skills, 24 providers, 5 actions"
+  },
+  "gitWorkflow": {
+    "isGitRepo": true,
+    "fileMode": true,
+    "bare": true,
+    "ignoreCase": true,
+    "hasNeverAutoCommitRule": true,
+    "hasHumanReviewsDiffs": true,
+    "agentCommitRule": null,
+    "hasPostTaskAutomation": true,
+    "hasGraphifyUpdate": true,
+    "hasGitIgnore": true,
+    "gitIgnorePatternCount": 0,
+    "gitIgnoreCategories": [
+      "node_modules",
+      "env files",
+      "build output"
+    ],
+    "hasPreCommitHook": false,
+    "hasCommitMsgHook": false,
+    "commitCount": 1,
+    "recentCommits": [
+      "feat: add odysseus and tmpmattpocock-skills directories\n40bf"
+    ],
+    "evidenceParts": [
+      ".git/config: git repo initialized",
+      "AGENTS.md: never-auto-commit rule found",
+      "CLAUDE.md: post-task automation rules found",
+      ".gitignore: 0 patterns",
+      "git log: 1 commits"
+    ],
+    "evidence": ".git/config: git repo initialized | AGENTS.md: never-auto-commit rule found | CLAUDE.md: post-task automation rules found | .gitignore: 0 patterns | git log: 1 commits"
+  },
+  "documentationPatterns": {
+    "hasAdrDir": true,
+    "adrFiles": [
+      "0001-use-triangular-connectors.md",
+      "0002-static-cache-and-offscreencanvas.md",
+      "0003-unit-and-integration-testing-strategy.md",
+      "0004-dirty-subgraph-rendering.md",
+      "0005-post-phase-3-optimization-roadmap.md",
+      "0006-taste-resolution-and-merge-algorithm.md",
+      "NODE_API_GUIDE.md"
+    ],
+    "adrCount": 7,
+    "adrYamlFrontmatter": true,
+    "adrStatuses": [
+      "accepted",
+      "proposed"
+    ],
+    "hasContextMd": true,
+    "contextLastUpdated": "1 Jul 2026",
+    "hasReadmeMd": true,
+    "hasClaudeMd": true,
+    "claudeTasteReference": true,
+    "claudeLoadOrder": true,
+    "hasAgentsMd": true,
+    "agentsGitRules": true,
+    "agentsWikiStructure": true,
+    "hasLessons": true,
+    "lessonCount": 2,
+    "lessonFormats": [
+      ".html"
+    ],
+    "hasReference": true,
+    "referenceCount": 1,
+    "referenceFormats": [
+      ".html"
+    ],
+    "hasTasteDir": true,
+    "tastePackageCount": 8,
+    "tasteActive": true,
+    "evidenceParts": [
+      "docs/adr/: 7 files",
+      "CONTEXT.md: project context document",
+      "README.md: project landing page",
+      "CLAUDE.md: agent entry point",
+      "AGENTS.md: agent instructions",
+      "lessons/: 2 files",
+      "reference/: 1 files",
+      ".taste/: 8 packages, active"
+    ],
+    "evidence": "docs/adr/: 7 files | CONTEXT.md: project context document | README.md: project landing page | CLAUDE.md: agent entry point | AGENTS.md: agent instructions | lessons/: 2 files | reference/: 1 files | .taste/: 8 packages, active"
+  },
+  "postTaskAutomation": {
+    "hasAutomation": true,
+    "hasTasteReference": true,
+    "evidence": "graphify post-task: true, taste reference: true"
+  },
+  "timestamp": "2026-07-02T06:15:12.799Z"
+}

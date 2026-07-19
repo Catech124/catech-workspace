@@ -1,0 +1,27 @@
+# .fdignore — Carpetas que fd debe ignorar automáticamente
+# Estas carpetas contienen logs, caches, binarios y dependencias
+# que NO necesito buscar cuando navego archivos.
+
+# Chats históricos de agentes (cientos de MB, miles de logs)
+.freebuff-account*/
+.freebuff-account2/
+.freebuff-account3/
+.freebuff-account4/
+
+# Caché de paquetes
+.bun/
+.bun/install/cache/
+
+# Binarios de Node
+node22/
+
+# Python virtualenvs y librerías
+playwrighter/
+
+# node_modules (dependencias)
+node_modules/
+tastedesign/node_modules/
+freebuff-modified/node_modules/
+
+# Archivos temporales
+/tmp/

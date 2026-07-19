@@ -1,0 +1,15 @@
+# .rgignore — Carpetas que ripgrep debe ignorar automáticamente
+# Mismas exclusiones que .fdignore pero en formato rg
+
+.freebuff-account*/
+.freebuff-account2/
+.freebuff-account3/
+.freebuff-account4/
+.bun/
+.bun/install/cache/
+node22/
+playwrighter/
+node_modules/
+tastedesign/node_modules/
+freebuff-modified/node_modules/
+/tmp/

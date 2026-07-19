@@ -1,0 +1,41 @@
+# freebuff-modified (ya tiene su propio repo git)
+/freebuff-modified/
+
+# Dependencias
+node_modules/
+.pnpm-store/
+.bun/
+
+# Entornos virtuales Python
+playwrighter/
+
+# Node.js
+node22/
+
+# Archivos de sistema
+.DS_Store
+Thumbs.db
+
+# Archivos de configuración local
+.env
+.env.local
+*.local.json
+
+# Caché
+.cache/
+.npm/
+.toolcraft/
+
+# Logs
+*.log
+dev_output.txt
+nul
+
+# Snap packages
+snap/
+
+# Config SSH (sensible)
+.ssh/
+
+# GPG
+.gnupg/

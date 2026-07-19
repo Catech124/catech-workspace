@@ -1,0 +1,22 @@
+#!/bin/bash
+# ==============================================
+# freebuff2 - Ejecuta Freebuff con cuenta #2
+# Usa un HOME aislado para no interferir con
+# la cuenta principal (~/.config/manicode/)
+# Usa el binario compilado desde freebuff-modified
+# (con polling reducido a 2s para menor latencia)
+#
+# Para recompilar tras cambios:
+#   cd ~/freebuff-modified && bun freebuff/cli/build.ts 0.0.0-dev
+# ==============================================
+
+ACCOUNT_HOME="$HOME/.freebuff-account2"
+FREEBUFF_BIN="$HOME/freebuff-modified/cli/bin/freebuff"
+
+if [ ! -x "$FREEBUFF_BIN" ]; then
+    echo "[ERROR] Binario no encontrado: $FREEBUFF_BIN" >&2
+    exit 1
+fi
+
+mkdir -p "$ACCOUNT_HOME/.config"
+HOME="$ACCOUNT_HOME" "$FREEBUFF_BIN"

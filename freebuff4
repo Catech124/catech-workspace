@@ -1,0 +1,16 @@
+#!/bin/bash
+# ==============================================
+# freebuff4 - Ejecuta Freebuff con cuenta #4
+# Usa un HOME aislado para no interferir con
+# las cuentas #1, #2 y #3.
+# ==============================================
+
+ACCOUNT_HOME="$HOME/.freebuff-account4"
+
+command -v freebuff >/dev/null 2>&1 || {
+    echo "[ERROR] freebuff no encontrado en PATH" >&2
+    exit 1
+}
+
+mkdir -p "$ACCOUNT_HOME/.config"
+HOME="$ACCOUNT_HOME" freebuff

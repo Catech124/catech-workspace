@@ -1,0 +1,34 @@
+#!/bin/bash
+# ==============================================
+# freebuff4-setup - Configura la cuenta #4
+# Ejecutar SOLO UNA VEZ para iniciar sesión
+# en la cuarta cuenta de Freebuff
+# ==============================================
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+ACCOUNT_HOME="$HOME/.freebuff-account4"
+
+echo "========================================="
+echo "  Configurando cuenta #4 de Freebuff"
+echo "========================================="
+echo ""
+echo "  Se abrira Freebuff con un HOME aislado."
+echo "  Inicia sesion con tu CUARTA cuenta."
+echo "  Al terminar, sal con Ctrl+C o /exit"
+echo ""
+echo "  HOME aislado: $ACCOUNT_HOME"
+echo "========================================="
+echo ""
+
+exec "$SCRIPT_DIR/freebuff4"
+
+mkdir -p "$ACCOUNT_HOME/.config"
+HOME="$ACCOUNT_HOME" freebuff
+
+echo ""
+echo "========================================="
+echo "  Cuenta #4 configurada!"
+echo "  Credenciales en: $ACCOUNT_HOME/.config/manicode/"
+echo ""
+echo "  Para usar la cuenta #4: freebuff4"
+echo "========================================="

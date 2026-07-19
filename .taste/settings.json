@@ -1,0 +1,25 @@
+{
+  "tasteVersion": "1.0.0",
+  "tasteLearning": true,
+  "tasteAutoSurvey": true,
+  "tasteAutoSurveyInterval": 30,
+  "postTaskAutomation": {
+    "graphifyUpdate": true,
+    "wikiAutoUpdate": false
+  },
+  "overrides": {
+    "core": {
+      "srp-200-lines-max": { "value": "archivos < 150 líneas", "confidence": 0.5 },
+      "semicolon-required": { "value": "opcional" },
+      "single-quotes-default": { "value": "double-quotes preferidas" }
+    },
+    "frontend": {
+      "css-bem-naming": { "value": "clases BEM descriptivas" },
+      "css-dark-theme-slate": { "value": "fondo #0d1117, texto #e6edf3" }
+    }
+  },
+  "metadata": {
+    "updated": "2026-07-01",
+    "author": "freebuff"
+  }
+}
