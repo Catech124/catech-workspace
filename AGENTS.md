@@ -188,6 +188,68 @@ bash ~/scripts/monitor.sh list
 
 Los logs quedan en `/tmp/monitor-sessions/<id>.log`.
 
+---
+
+## 🤖 Telegram Bridge (Herdr ↔ Telegram)
+
+Bridge bidireccional que conecta Telegram con los agentes de Herdr.
+
+### 📍 Ubicación
+
+| Componente | Ruta |
+|---|---|
+| **Bridge principal** | `~/.freebuff-account2/herdr-telegram-bridge/bridge.mjs` |
+| **Librería** | `~/.freebuff-account2/herdr-telegram-bridge/lib.mjs` |
+| **Configuración (token)** | `~/.freebuff-account2/herdr-telegram-bridge/.env` |
+| **Ejemplo de config** | `~/.freebuff-account2/herdr-telegram-bridge/.env.example` |
+| **Script de inicio** | `~/.freebuff-account2/herdr-telegram-bridge/start-bridge.sh` |
+| **Script de parada** | `~/.freebuff-account2/herdr-telegram-bridge/stop-bridge.sh` |
+| **Copia en el repo** | `docs/telegram-bridge.mjs` y `docs/telegram-bridge-lib.mjs` |
+
+### 🔐 Token y configuración
+
+El token del bot de Telegram y el chat ID están en el archivo `.env`:
+```bash
+cat ~/.freebuff-account2/herdr-telegram-bridge/.env
+```
+
+Variables principales:
+- `TELEGRAM_BOT_TOKEN` — Token del bot creado con @BotFather
+- `TELEGRAM_CHAT_ID` — ID numérico del chat de Telegram
+- `NOTIFY_ON_BLOCKED` — Notificar cuando un agente se bloquea (1/0)
+- `NOTIFY_ON_DONE` — Notificar cuando completa (1/0)
+- `BLOCKED_PREVIEW_LINES` — Líneas de preview al notificar bloqueo
+
+### 🚀 Comandos
+
+```bash
+# Ver estado
+cd ~/.freebuff-account2/herdr-telegram-bridge && node bridge.mjs --status
+
+# Iniciar en foreground (debug)
+node bridge.mjs
+
+# Iniciar en background
+bash start-bridge.sh
+
+# Detener
+bash stop-bridge.sh
+```
+
+### 📱 Funcionalidades
+
+- Notifica a Telegram cuando un agente se bloquea, empieza a trabajar o termina
+- Permite responder a los agentes desde Telegram
+- Soporta fotos desde Telegram al agente
+- Comandos: `/target`, `/agents`, `/start`, `/output`, `/cancel`, `/bridge`, `/autostart`
+- Detecta preguntas de Freebuff (`ask_user`) y las reenvía a Telegram
+
+### 📄 Documentación
+
+El AGENTS.md para ChatGPT (guía para que ChatGPT colabore con Freebuff) se encuentra en:
+- **Windows:** `C:\Users\catec\Downloads\AGENTS.md`
+- **Enviado a:** Telegram (chat con el bot)
+
 ## 📦 Dependencias del sistema
 
 Para conocer las rutas exactas de dependencias instaladas en Windows (yt-dlp, Python, modelo Parakeet, scripts), consulta el archivo:
