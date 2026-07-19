@@ -22,6 +22,14 @@ Cuando el usuario te mencione como **"planificador"** o **"implementador"**, deb
 ### Canal de comunicación
 Ambos roles se comunican mediante un archivo compartido `state.json`. Ninguno interrumpe al otro en medio de una fase.
 
+### Integración con el sistema de instrucciones
+El flujo planificador↔implementador se conecta con el sistema de `instructions/`:
+- El **planificador** escribe instrucciones/chunks en `instructions/` para que el implementador las ejecute
+- El **implementador** detecta nuevas instrucciones via el cron (cada 5 min) o ejecutando `bash process-instructions.sh`
+- Los resultados y reportes se pushean de vuelta al repo para que el planificador los lea
+- Cuando trabajes como **planificador**, lee `roles/reglas_planificador.md`
+- Cuando trabajes como **implementador**, lee `roles/reglas_implementador.md`
+
 ---
 
 ## Instrucciones automáticas (ChatGPT → Freebuff)
