@@ -37,5 +37,13 @@ snap/
 # Config SSH (sensible)
 .ssh/
 
+# Cuentas freebuff (credenciales)
+.freebuff-account*/
+
 # GPG
 .gnupg/
+
+# Archivos de sistema
+.bash_history
+.sudo_as_admin_successful
+.motd_shown
