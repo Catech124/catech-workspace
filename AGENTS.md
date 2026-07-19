@@ -52,6 +52,152 @@ ChatGPT escribe instrucciones en `instructions/` → Freebuff las ejecuta.
 crontab -l  # Ver cron activo
 ```
 
+## 🔍 Búsqueda ultrarrápida de archivos
+
+El sistema tiene herramientas instaladas para buscar archivos al instante:
+
+| Herramienta | Versión | Ubicación | Uso |
+|---|---|---|---|
+| **`fd`** | v10.2.0 | `~/scripts/fd` | Buscar archivos por nombre/patrón |
+| **`plocate`** | v1.1.19 | `/usr/bin/plocate` | Búsqueda instantánea por DB indexada (~0.3 ms) |
+| **`rg` (ripgrep)** | v14.1.0 | `/usr/bin/rg` | Buscar texto DENTRO de archivos |
+| **`fzf`** | v0.44.1 | `/usr/bin/fzf` | Filtrar resultados interactivamente |
+| **`bat`** | — | `/usr/bin/bat` | Ver archivos con syntax highlighting |
+
+### Comandos útiles
+
+```bash
+# Buscar archivos por nombre (usar ruta completa para evitar el fd roto de Windows)
+~/scripts/fd '.md$' ~
+~/scripts/fd -t f '.ts$' ~/freebuff-modified
+~/scripts/fd --changed-within 24h '.md$' ~
+~/scripts/fd 'transcribe' /mnt/c/Users/catec/
+
+# Búsqueda instantánea por DB indexada (solo Linux, excluye /mnt/c)
+plocate SKILL.md
+plocate transcribe_parakeet.py
+plocate -r 'wat.*SKILL'
+
+# Buscar texto dentro de archivos
+rg -l "onnxruntime" ~/
+
+# Buscar + filtrar interactivamente
+plocate -r '.' | fzf --preview 'bat --color=always {}'
+```
+
+> ⚠️ Usa siempre `~/scripts/fd` porque el `fd` de Windows (`/mnt/c/Users/catec/AppData/Roaming/npm/fd`) está roto y tiene prioridad en el PATH.
+
+### Carpetas ignoradas (`.fdignore` + `.rgignore`)
+
+Para búsquedas instantáneas, estas carpetas se ignoran automáticamente:
+- `.freebuff-account*` (~1 GB, logs de chats)
+- `.bun/` (909 MB, caché Bun)
+- `node22/` (538 MB, binarios Node.js)
+- `playwrighter/` (343 MB, Python virtualenv)
+- `node_modules/` (~300 MB, dependencias npm)
+
+> Antes: `fd .md ~` → TIMEOUT (>30s) | Ahora: `fd .md ~` → INSTANTÁNEO (<1s)
+
+---
+
+## 🌐 Conexión SSH a Windows (WSL → Windows)
+
+Acceso SSH desde WSL hacia Windows para ejecutar comandos remotos.
+
+| Aspecto | Detalle |
+|---|---|
+| **Host SSH** | `windows` (configurado en `~/.ssh/config`) |
+| **Llave** | `~/.ssh/id_ed25519_vm` |
+| **Conexión** | ✅ Establecida y verificada |
+| **Uso principal** | Ejecutar Python, scripts y comandos en Windows desde WSL |
+
+### Comandos básicos
+
+```bash
+# Verificar conexión
+ssh windows echo ok
+
+# Ejecutar comandos en Windows
+ssh windows "where python"
+
+# Usar Python del venv odysseus
+ssh windows "C:\Users\catec\odysseus\venv\Scripts\python.exe --version"
+
+# Ejecutar transcripción en Windows
+ssh windows "C:\Users\catec\odysseus\venv\Scripts\python.exe C:\Users\catec\transcribe_parakeet.py C:\Users\catec\audio.wav"
+
+# Verificar yt-dlp
+ssh windows "C:\Users\catec\.stacher\yt-dlp.exe --version"
+```
+
+### Ventajas sobre `/mnt/c/`
+
+| Aspecto | `/mnt/c/` (montaje) | SSH `windows` |
+|---|---|---|
+| Ejecutar .exe | ❌ No funciona | ✅ Sí, corre en Windows nativo |
+| Velocidad I/O | Lento (DrvFs) | ✅ Rápido (NTFS) |
+| Permisos | ❌ Problemas | ✅ Usuario Windows real |
+
+---
+
+## 🖥️ monitor.sh — Script helper para monitoreo en vivo
+
+Script para ejecutar comandos largos con `nohup` (persisten entre sub-agentes) y leer el output raw.
+
+**Ubicación:** `~/scripts/monitor.sh` | **Uso:** `bash ~/scripts/monitor.sh`
+
+### Comandos
+
+| Comando | Qué hace |
+|---|---|
+| `start <id> "<comando>"` | Inicia un comando largo en background con nohup |
+| `status <id>` | Muestra el output **raw completo** del log |
+| `stream <id> <segs>` | Monitorea cada 0.5s por N segundos |
+| `cancel <id>` | Mata el proceso (SIGTERM) |
+| `wait <id> [timeout]` | Espera a que termine y muestra todo |
+| `last <id> [N]` | Últimas N líneas del log |
+| `list` | Lista todas las sesiones activas |
+| `clean <id>` | Limpia logs de una sesión terminada |
+
+### Ejemplos
+
+```bash
+# Iniciar comando largo
+bash ~/scripts/monitor.sh start transcripcion "sleep 30 && echo listo"
+
+# Ver progreso en RAW
+bash ~/scripts/monitor.sh status transcripcion
+
+# Streaming en vivo por 8 segundos
+bash ~/scripts/monitor.sh stream transcripcion 8
+
+# Leer el log directamente (raw output exacto)
+cat /tmp/monitor-sessions/transcripcion.log
+
+# Cancelar si algo sale mal
+bash ~/scripts/monitor.sh cancel transcripcion
+
+# Esperar a que termine (timeout 120s)
+bash ~/scripts/monitor.sh wait transcripcion 120
+
+# Listar sesiones activas
+bash ~/scripts/monitor.sh list
+```
+
+Los logs quedan en `/tmp/monitor-sessions/<id>.log`.
+
+---
+
+## 📦 Dependencias del sistema
+
+Para conocer las rutas exactas de dependencias instaladas en Windows (yt-dlp, Python, modelo Parakeet, scripts), consulta el archivo:
+
+> **`docs/dependencias-windows.md`** — Árbol de instalaciones y guía de uso de herramientas.
+
+Este archivo contiene el inventario completo de dependencias verificadas, pero sin entrar en detalle aquí. Úsalo como referencia cuando necesites una ruta específica.
+
+---
+
 ## AI subagents (Claude, ChatGPT, Gemini, DeepSeek, Kimi, ChatGLM)
 
 **Path:** `/mnt/c/Users/catec/agent-dashboard`
