@@ -120,15 +120,17 @@ ssh windows echo ok
 # Ejecutar comandos en Windows
 ssh windows "where python"
 
-# Usar Python del venv odysseus
-ssh windows "C:\Users\catec\odysseus\venv\Scripts\python.exe --version"
+# Ejecutar Python del venv en Windows
+ssh windows "ruta/al/venv/Scripts/python.exe --version"
 
-# Ejecutar transcripción en Windows
-ssh windows "C:\Users\catec\odysseus\venv\Scripts\python.exe C:\Users\catec\transcribe_parakeet.py C:\Users\catec\audio.wav"
+# Ejecutar un script en Windows
+ssh windows "ruta/al/venv/Scripts/python.exe ruta/al/script.py"
 
-# Verificar yt-dlp
-ssh windows "C:\Users\catec\.stacher\yt-dlp.exe --version"
+# Verificar versión de una herramienta en Windows
+ssh windows "ruta/a/la/herramienta.exe --version"
 ```
+
+> 💡 Para las rutas exactas, consulta `docs/dependencias-windows.md`.
 
 ### Ventajas sobre `/mnt/c/`
 
@@ -186,15 +188,13 @@ bash ~/scripts/monitor.sh list
 
 Los logs quedan en `/tmp/monitor-sessions/<id>.log`.
 
----
-
 ## 📦 Dependencias del sistema
 
 Para conocer las rutas exactas de dependencias instaladas en Windows (yt-dlp, Python, modelo Parakeet, scripts), consulta el archivo:
 
 > **`docs/dependencias-windows.md`** — Árbol de instalaciones y guía de uso de herramientas.
 
-Este archivo contiene el inventario completo de dependencias verificadas, pero sin entrar en detalle aquí. Úsalo como referencia cuando necesites una ruta específica.
+Este archivo contiene el inventario completo de dependencias verificadas. Úsalo como referencia cuando necesites una ruta específica.
 
 ---
 
