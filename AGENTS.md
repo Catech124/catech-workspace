@@ -22,6 +22,8 @@ Cuando el usuario te mencione como **"planificador"** o **"implementador"**, deb
 ### Canal de comunicación
 Ambos roles se comunican mediante un archivo compartido `state.json`. Ninguno interrumpe al otro en medio de una fase.
 
+> **⚠️ Nota:** El sistema `state.json` con middleware Odin mencionado en los archivos de reglas **no está implementado aún**. Mientras tanto, el canal real de comunicación entre roles es el sistema `instructions/` (escribir → detectar → ejecutar → reportar).
+
 ### Integración con el sistema de instrucciones
 El flujo planificador↔implementador se conecta con el sistema de `instructions/`:
 - El **planificador** escribe instrucciones/chunks en `instructions/` para que el implementador las ejecute
