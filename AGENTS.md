@@ -3,6 +3,24 @@
 ## Git — never auto-commit
 Do NOT run `git commit` or `git push` unless the human explicitly asks. List what changed and stop.
 
+## Instrucciones automáticas (ChatGPT → Freebuff)
+ChatGPT escribe instrucciones en `instructions/` → Freebuff las ejecuta.
+
+**Flujo:**
+1. Freebuff trabaja y pushea reportes a GitHub
+2. ChatGPT lee el repo via extensión, analiza, decide qué hacer
+3. ChatGPT escribe un archivo `.md` en `instructions/` con formato YAML frontmatter
+4. Freebuff ejecuta `bash process-instructions.sh` o el cron lo hace automáticamente
+5. Freebuff ejecuta la instrucción y pushea el resultado
+6. ChatGPT lee el resultado y el ciclo continúa
+
+**Comandos disponibles:** `summarize`, `analyze`, `refactor`, `write-readme`, `taste-survey`, `custom`
+
+**Monitoreo automático:** El cron revisa cada 5 min si hay instrucciones nuevas:
+```bash
+crontab -l  # Ver cron activo
+```
+
 ## AI subagents (Claude, ChatGPT, Gemini, DeepSeek, Kimi, ChatGLM)
 
 **Path:** `/mnt/c/Users/catec/agent-dashboard`
