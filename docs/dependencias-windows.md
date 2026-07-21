@@ -92,6 +92,62 @@
 └─────────────────────────────────────────────────┘
 ```
 
-## 7. Dependencias — Completas ✅
+## 7. Freebuff Chats — Rutas y limpieza
+
+Los chats de freebuff se almacenan como archivos JSON dentro de cada cuenta aislada. Ocupan espacio en disco que puede crecer con el uso.
+
+### Rutas de proyectos/chats por cuenta
+
+| Cuenta | Ruta `projects/` |
+|---|---|
+| **Cuenta 1** | `~/.config/manicode/projects/` |
+| **Cuenta 2** | `~/.freebuff-account2/.config/manicode/projects/` |
+| **Cuenta 3** | `~/.freebuff-account3/.config/manicode/projects/` |
+| **Cuenta 4** | `~/.freebuff-account4/.config/manicode/projects/` |
+
+### Ruta del historial de mensajes
+
+| Cuenta | Ruta `message-history.json` |
+|---|---|
+| **Cuenta 1** | `~/.config/manicode/message-history.json` |
+| **Cuenta 2** | `~/.freebuff-account2/.config/manicode/message-history.json` |
+| **Cuenta 3** | `~/.freebuff-account3/.config/manicode/message-history.json` |
+| **Cuenta 4** | `~/.freebuff-account4/.config/manicode/message-history.json` |
+
+### Comandos de diagnóstico
+
+```bash
+# Ver tamaño de chats por cuenta
+echo "Cuenta 1: $(du -sh ~/.config/manicode/message-history.json 2>/dev/null | cut -f1)"
+echo "Cuenta 2: $(du -sh ~/.freebuff-account2/.config/manicode/message-history.json 2>/dev/null | cut -f1)"
+echo "Cuenta 3: $(du -sh ~/.freebuff-account3/.config/manicode/message-history.json 2>/dev/null | cut -f1)"
+echo "Cuenta 4: $(du -sh ~/.freebuff-account4/.config/manicode/message-history.json 2>/dev/null | cut -f1)"
+
+# Ver tamaño de projects/ (chats embedidos) por cuenta
+echo "Cuenta 1: $(du -sh ~/.config/manicode/projects/ 2>/dev/null | cut -f1)"
+echo "Cuenta 2: $(du -sh ~/.freebuff-account2/.config/manicode/projects/ 2>/dev/null | cut -f1)"
+echo "Cuenta 3: $(du -sh ~/.freebuff-account3/.config/manicode/projects/ 2>/dev/null | cut -f1)"
+echo "Cuenta 4: $(du -sh ~/.freebuff-account4/.config/manicode/projects/ 2>/dev/null | cut -f1)"
+
+# Total combinado
+du -sh ~/.config/manicode/projects/ ~/.freebuff-account{2,3,4}/.config/manicode/projects/ 2>/dev/null | tail -1
+```
+
+### Limpieza
+
+```bash
+# Borrar SOLO chats project/ de una cuenta específica (ej: cuenta 1)
+rm -rf ~/.config/manicode/projects/*/chats/*
+
+# Borrar projects/ completo de una cuenta (se regenera solo)
+rm -rf ~/.config/manicode/projects/
+
+# Borrar projects/ de TODAS las cuentas a la vez
+rm -rf ~/.config/manicode/projects/ ~/.freebuff-account{2,3,4}/.config/manicode/projects/
+```
+
+> ⚠️ Los chats en `message-history.json` NO se regeneran al borrarlos. Los de `projects/` sí se regeneran solos con el uso.
+
+## 8. Dependencias — Completas ✅
 
 Todas las dependencias están instaladas y verificadas en el virtualenv `odysseus`. No hay pasos pendientes.

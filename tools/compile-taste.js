@@ -258,15 +258,6 @@ function parseSettingsFile(filePath, domain) {
 }
 
 /**
- * findLegacyPath(domain) → path or null
- */
-function findLegacyPath(domain) {
-  const legacyFile = path.join(PROJECT_ROOT, 'FREEBIFF_CORE_ENGINEERING_RULES.md');
-  if (fs.existsSync(legacyFile)) return legacyFile;
-  return null;
-}
-
-/**
  * findClaudeMdPath() → path or null
  */
 function findClaudeMdPath() {
@@ -467,13 +458,6 @@ function resolveTaste(cache) {
  * Folds P6 → P1 for one domain. Validates each level once.
  */
 function resolveTasteForDomain(domain, cache) {
-  const level6 = validateAndFilter(
-    readLevel('P6:legacy', cache, () => {
-      const p = findLegacyPath(domain);
-      return p ? parsePackageFile(p) : null;
-    })
-  );
-
   const level5 = validateAndFilter(
     readLevel('P5:CLAUDE.md', cache, () => {
       const p = findClaudeMdPath();
@@ -504,9 +488,8 @@ function resolveTasteForDomain(domain, cache) {
     parseSettingsFile(path.join(TASTE_DIR, 'settings.local.json'), domain)
   );
 
-  // Fold P6 → P1 in ascending priority
+  // Fold levels P5 → P1 in ascending priority
   const levels = [
-    { name: 'P6:legacy', pkg: level6 },
     { name: 'P5:CLAUDE.md', pkg: level5 },
     { name: 'P4:global-config', pkg: level4 },
     { name: `P3:.taste/${domain}/index.md`, pkg: level3 },

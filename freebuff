@@ -1,0 +1,22 @@
+#!/bin/bash
+# ==============================================
+# freebuff - Ejecuta Freebuff con cuenta #1
+# Usa un HOME aislado para no interferir con
+# las cuentas #2, #3 y #4.
+# Usa el freebuff del sistema (absoluto) con HOME aislado.
+#
+# NOTA: Usa /usr/bin/freebuff (ruta absoluta) en vez de
+# resolver por PATH para evitar recursión cuando
+# ~/.local/bin/freebuff está en el PATH.
+# ==============================================
+
+ACCOUNT_HOME="$HOME/.freebuff-account1"
+FREEBUFF_BIN="/usr/bin/freebuff"
+
+if [ ! -x "$FREEBUFF_BIN" ]; then
+    echo "[ERROR] freebuff no encontrado en $FREEBUFF_BIN" >&2
+    exit 1
+fi
+
+mkdir -p "$ACCOUNT_HOME/.config"
+HOME="$ACCOUNT_HOME" "$FREEBUFF_BIN"

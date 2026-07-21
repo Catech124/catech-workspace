@@ -1,0 +1,143 @@
+### Common protocol — URL parsing, slug derivation, inbox tags, companion fetch
+
+Shared subroutines used by `ingest.md` and `queue.md`. Read the relevant section instead of inlining.
+
+---
+
+## Source-type detection
+
+Match the URL in this order:
+
+| Pattern | Type |
+|---|---|
+| `github.com/<org>/<repo>` — exactly two non-empty path segments | `github` |
+| `github.com/<org>/<repo>/<...>` — any additional path segments (`/tree/...`, `/blob/...`, `/issues/...`) | `web` (single-page) |
+| `youtube.com/watch?v=` or `youtu.be/<id>` | `youtube` |
+| anything else | `web` |
+
+If the detected type is not in `source_types` from config, note the mismatch in the final confirmation but proceed anyway — the user explicitly requested this URL.
+
+---
+
+## Pending URL identity (duplicate detection)
+
+Use this normalization when deciding whether two pending inbox lines refer to the **same** source (for deduplicating work and consolidating `## Completed`).
+
+1. Extract the URL token from the inbox line (first URL-shaped token after `- [ ]` / `- [x]`).
+2. Trim ASCII whitespace around the URL string.
+3. Parse as a URL. If parsing fails, treat the raw trimmed string as the identity (no merging with other lines).
+4. **Scheme + host:** lowercase both.
+5. **Host-only exception — YouTube:** if the host is `youtu.be` or ends with `youtube.com` (e.g. `www.youtube.com`, `m.youtube.com`), reduce to a **canonical key**:
+   - `youtu.be/<video-id>` → key `youtube:<video-id>` (path segment only, ignore query).
+   - `youtube.com/...` → extract `v=` from query or `list=` if needed; for standard watch URLs use key `youtube:<v>`.
+   - Two lines that resolve to the same `youtube:<video-id>` are duplicates.
+6. **All other URLs:** identity key = string `url:` + normalized serialization: scheme + `://` + host + path with trailing `/` removed except when path is `/`, + sorted query string if present (standard `key=value` pairs; omit empty query). Strip `#fragment`.
+7. Two pending lines are **duplicates** iff their identity keys are equal.
+
+`queue` may still refuse a second append when it finds the same raw URL string already in Pending; humans can still paste duplicate lines manually — `ingest` uses this section to merge them.
+
+---
+
+## Slug and raw-path derivation
+
+**GitHub:**
+- Slug: `<org>-<repo>`
+- Raw path: `raw/github/<org>-<repo>.md`
+
+**YouTube:**
+- Video ID from URL (`?v=<id>` or `youtu.be/<id>`)
+- Title slug: lowercase title, spaces/special chars → hyphens, truncate at 40 chars — **requires `yt-dlp --dump-json` output; finalize after fetch step 1, before writing the raw file**
+- Full slug: `<video-id>-<title-slug>`
+- Raw path: `raw/youtube/<video-id>-<title-slug>.md`
+
+**Web:**
+- Domain: hostname with `www.` stripped; preserve subdomains (e.g. `docs.langchain.com` stays as `docs.langchain.com`)
+- Slug: the domain string
+- Raw path: `raw/web/<slug>.md` — always one file per ingest, regardless of detail level
+
+**Web — X/Twitter status post** (host is `x.com` or `twitter.com` and path matches `/<user>/status/<id>` with optional trailing segments like `/photo/1`):
+- Slug: `<host>-<user>-<title-slug>` (lowercase host preserved as `x.com` or `twitter.com`)
+- Title-slug derivation — **requires fetched post; finalize after the fetch step, before writing the raw file** (mirrors YouTube):
+  1. **Post title first** — extract from the fetch `Title:` metadata line: `<DisplayName> on X: "<Post Title>" / X`. Use the quoted `<Post Title>` string; strip surrounding quotes and the trailing ` / X` suffix. This is the canonical name source — do **not** derive from the tweet body when a title is present.
+  2. **Body fallback** — if step 1 yields nothing (image/video-only post, missing `Title:` line), use the first sentence of the tweet body instead.
+  3. **Truncate long titles** — if the string from step 1 or 2 contains `.`, `?`, or `!` sentence boundaries (treating `.` inside known acronyms like `CLAUDE.md`, `e.g.`, `i.e.` as non-terminal: don't split when the period is preceded by a single uppercase letter or a recognized abbreviation and followed by a non-space), keep only the first sentence. Short titles without sentence-ending punctuation pass through whole.
+  4. **Strip apostrophes** (`'` and `'`) by deletion, not hyphenation: `Karpathy's` → `karpathys` (not `karpathy-s`).
+  5. Lowercase; replace any remaining run of non-alphanumeric characters with a single `-`; trim leading/trailing `-`.
+  6. **Do not drop stopwords** — post titles are author-chosen; preserve every word (unlike Medium path-slug derivation).
+  7. Truncate at **50 chars** at the last `-` boundary (no mid-word cuts).
+  8. **Fallback** — if the title is empty or yields a title-slug shorter than 8 chars after step 7, use `status-<id>` instead.
+- Example: `https://x.com/mnilax/status/2053116311132155938` with title "Karpathy's 4 CLAUDE.md rules cut Claude mistakes from 41% to 11%. After 30 codebases, I added 8 more" → first sentence → `x.com-mnilax-karpathys-4-claude-md-rules-cut-claude-mistakes`
+- Example: `https://x.com/ericzakariasson/status/2036762680401223946` with title "Building CLIs for agents" → `x.com-ericzakariasson-building-clis-for-agents`
+- Raw path: `raw/web/<slug>.md`
+- Treated as a **single-page web capture**: fetch only the exact status URL (via Jina reader fallback if direct fetch is blocked); skip llms.txt, docs discovery, and companion discovery regardless of detail level. A companion GitHub repo may still be fetched if a `github.com/<org>/<repo>` URL appears in the post body and `suppress_companion` is false.
+
+**Web — Medium article** (host is `medium.com` with path `/@<author>/<slug>`, or host is `<author>.medium.com` with path `/<article-slug>`):
+- Slug: derived from the article path slug — **do not use the domain `medium.com`**
+- Title-slug derivation — may be finalized from the URL alone (no fetch needed):
+  1. Extract the article path slug: last non-empty path segment, e.g. `10-must-have-clis-for-your-ai-agents-in-2026-51ba0d0881df`.
+  2. **Strip the Medium post ID** — remove the trailing `-<hex-id>` suffix: a run of 8–14 lowercase hex characters (`[0-9a-f]{8,14}`) after the last hyphen. Example: `10-must-have-clis-for-your-ai-agents-in-2026-51ba0d0881df` → `10-must-have-clis-for-your-ai-agents-in-2026`.
+  3. Lowercase; replace any run of non-alphanumeric characters with a single `-`; trim leading/trailing `-`.
+  4. **Drop stopwords** (same list as X/Twitter): `a, an, the, of, from, to, in, on, for, by, with, and, or, but, as, at`.
+  5. Truncate at **50 chars** at the last `-` boundary (no mid-word cuts).
+  6. **Fallback** — if the result is shorter than 8 chars, use `medium-<hex-id>` instead.
+- Example: `https://medium.com/@unicodeveloper/10-must-have-clis-for-your-ai-agents-in-2026-51ba0d0881df` → slug: `10-must-have-clis-ai-agents-2026`
+- Raw path: `raw/web/<slug>.md`
+- Treated as a **single-page web capture**: skip llms.txt, docs discovery, and companion discovery regardless of detail level.
+- **Fetch note — Medium is Cloudflare-blocked on the `@user` path form.** Always fetch via Jina Reader using the subdomain URL: derive author name from the URL (strip `@` from `@<author>`), then fetch `r.jina.ai/https://<author>.medium.com/<article-slug>`. If the inbox URL is already in subdomain form (`<author>.medium.com/<slug>`), use it directly. Do **not** attempt `medium.com/@<author>/...` directly — it returns 403.
+
+**GitHub non-root page** (URL is `github.com/<org>/<repo>/<...>`):
+- Slug derivation — parse path after `github.com/<org>/<repo>/`:
+  1. Strip leading `tree/<ref>/`, `blob/<ref>/`, or `issues/<n>/` / `pull/<n>/` prefixes.
+  2. Let **leaf** = last non-empty path segment; if it has a file extension, use the stem only.
+  3. If **leaf** is generic (`src`, `lib`, `docs`, `test`, `tests`, `dist`, `build`, `main`, `master`, `readme`) use `<repo>-<leaf>` (kebab-cased) instead of leaf alone.
+  4. Otherwise slug = kebab-case(**leaf**).
+  5. **`-mcp` suffix:** append when the path (after repo) contains a segment `mcp`, OR `<repo>` is `servers` (MCP servers monorepo convention), unless slug already ends with `-mcp`.
+  6. **Collision guard:** if the slug already exists in `wiki/index.md`, prefix with `<repo>-` (e.g. `servers-sequentialthinking-mcp`).
+- Example: `https://github.com/modelcontextprotocol/servers/tree/main/src/sequentialthinking` → `sequentialthinking-mcp`
+- Raw path: `raw/web/<slug>.md`
+- Treated as a **single-page web capture**: fetch only the exact URL; skip llms.txt, docs discovery, and companion discovery regardless of detail level.
+
+---
+
+## Inbox-line tag parsing
+
+After the URL on an inbox line, any of these HTML comments may appear:
+
+| Tag | Meaning |
+|---|---|
+| `<!-- detail:X -->` | X ∈ `brief`/`standard`/`deep`. Overrides `detail_level` for this source only. |
+| `<!-- branch:X -->` | GitHub only. Override default branch detection. |
+| `<!-- clone -->` | GitHub only; effective only at `deep`; triggers full `git clone`. |
+| `<!-- companion:github.com/<org>/<repo> -->` | Web only. Skip GitHub discovery; use this exact repo as companion. |
+| `<!-- no-companion -->` | Web only. Suppress companion GitHub fetch even if a repo is detected. |
+| `<!-- skip -->` | `ingest` skips the line on every invocation until the tag is removed. |
+| `<!-- refresh -->` | Persists in `## Completed`; triggers Pass 2 refresh on next `ingest`. |
+| `<!-- note: <text> -->` | Freeform rationale. Preserved as-is; ignored by all subcommands. |
+| `<!-- fetch-failed:<reason> -->` | Auto-added when fetch fails (e.g. `no-transcript`). |
+| `<!-- ingested YYYY-MM-DD -->` | Auto-added when the line moves to `## Completed`. |
+| `<!-- refreshed YYYY-MM-DD -->` | Auto-added on successful Pass 2 refresh. |
+
+Derived values:
+- **Effective detail level** = `<!-- detail:X -->` if present, else `detail_level` from config.
+- **`companion_override_url`** = URL from `<!-- companion:... -->` tag, or null.
+- **`suppress_companion`** = true if `<!-- no-companion -->` is present, else false.
+
+---
+
+## Companion-fetch sub-protocol (web sources)
+
+**Runs only when:** `type = web` AND web protocol step 7 returned non-null `companion_github_url` AND `suppress_companion` is false AND web protocol step 5 returned `len(products) < 2` (deep multi-product mode skips companion fetch entirely).
+
+If `companion_override_url` is set, use it as `companion_github_url` instead of the discovered value.
+
+**Self-loop guard:** if `companion_github_url` resolves to the same repo as the inbox URL, discard it (set `companion_github_url = null`, skip).
+
+Steps:
+1. Derive `companion_slug = <org>-<repo>` and `companion_raw_file_path = raw/github/<org>-<repo>.md`.
+2. Read `<skill-dir>/templates/protocols/github.md`; fetch `github.com/<org>/<repo>` at `effective_detail_level`. Inherit any `<!-- branch:X -->` tag.
+3. Write `companion_raw_file_path`.
+4. Update `raw/github/README.md`: add row or update in-place.
+
+**Failure handling:**
+- Fetch error → log `WARN: companion fetch failed for <url> — <reason>`, set `companion_slug = null`, proceed with web-only ingest.
+- 200k token guard would be exceeded → ask user to choose: (a) proceed companion-only at `brief`, (b) skip companion, or (c) abort.

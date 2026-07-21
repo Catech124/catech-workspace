@@ -1,6 +1,6 @@
 # COMPILED TASTE — Freebuff System Prompt
 
-> **compiled:** 2026-07-04
+> **compiled:** 2026-07-21
 > **packages:** 8
 > **source:** .taste/ (Taste System v1.0.0, ADR 0006)
 
@@ -8,14 +8,14 @@
 
 | Package | Domain | Rules | Patterns | Confidence | Levels |
 |---|---|---|---|---|---|
-| core | Reglas de ingeniería fundamentales del proyecto ARC Editor | 24 | ✅ | 0.50 | 5 |
-| frontend | Preferencias de UI/UX, Canvas, CSS y eventos del ARC Editor | 54 | ✅ | 0.60 | 5 |
-| backend | Preferencias de backend (Python/FastAPI + Go) | 31 | ✅ | 0.80 | 3 |
-| nodes | Convenciones del DAG de nodos (Fusion-style) | 61 | ✅ | 0.85 | 4 |
-| animation | Preferencias de animación (keyframes, modifiers, spline) | 44 | ✅ | 0.90 | 3 |
-| design | Sistema de Design Tokens (Figma → Style Dictionary → CSS/JS) | 8 | ✅ | 0.90 | 3 |
-| skills | Playbooks reutilizables y workflows del agente | 51 | ✅ | 0.70 | 3 |
-| tools | Preferencias de toolchain, scripts y herramientas | 74 | ✅ | 0.75 | 4 |
+| core | Reglas de ingeniería fundamentales del proyecto ARC Editor | 24 | ✅ | 0.50 | 3 |
+| frontend | Preferencias de UI/UX, Canvas, CSS y eventos del ARC Editor | 54 | ✅ | 0.60 | 3 |
+| backend | Preferencias de backend (Python/FastAPI + Go) | 31 | ✅ | 0.80 | 1 |
+| nodes | Convenciones del DAG de nodos (Fusion-style) | 61 | ✅ | 0.85 | 2 |
+| animation | Preferencias de animación (keyframes, modifiers, spline) | 44 | ✅ | 0.90 | 1 |
+| design | Sistema de Design Tokens (Figma → Style Dictionary → CSS/JS) | 8 | ✅ | 0.90 | 1 |
+| skills | Playbooks reutilizables y workflows del agente | 51 | ✅ | 0.70 | 1 |
+| tools | Preferencias de toolchain, scripts y herramientas | 74 | ✅ | 0.75 | 2 |
 
 ---
 
@@ -63,7 +63,7 @@
 - **rationale:** El sistema de render delega por tipo de nodo; un tipo inexistente causa renderizado nulo
 
 > **24 rules · confidence 0.50**
-> **levels:** P6:legacy, P5:CLAUDE.md, P3:.taste/core/index.md, P2:settings.json, P1:settings.local.json
+> **levels:** P3:.taste/core/index.md, P2:settings.json, P1:settings.local.json
 
 ---
 
@@ -148,7 +148,7 @@
 - **rationale:** Crear contextos nuevos en cada frame es ineficiente y causa GC
 
 > **54 rules · confidence 0.60**
-> **levels:** P6:legacy, P5:CLAUDE.md, P3:.taste/frontend/index.md, P2:settings.json, P1:settings.local.json
+> **levels:** P3:.taste/frontend/index.md, P2:settings.json, P1:settings.local.json
 
 ---
 
@@ -210,7 +210,7 @@
 - **rationale:** No bloquear el event loop de FastAPI
 
 > **31 rules · confidence 0.80**
-> **levels:** P6:legacy, P5:CLAUDE.md, P3:.taste/backend/index.md
+> **levels:** P3:.taste/backend/index.md
 
 ---
 
@@ -350,7 +350,7 @@ try {
 - Si un nodo falla, su output es `undefined` y el siguiente nodo en la cadena recibe `null` como input — el pipeline maneja nulls gracefulmente `[error-boundary-undefined-fallback]` (confidence: 0.90)
 
 > **61 rules · confidence 0.85**
-> **levels:** P6:legacy, P5:CLAUDE.md, P3:.taste/nodes/index.md, P1:settings.local.json
+> **levels:** P3:.taste/nodes/index.md, P1:settings.local.json
 
 ---
 
@@ -460,7 +460,7 @@ Siempre llamar `Store.snapshot()` ANTES de mutar keyframes, modifiers o animated
 Para operaciones múltiples, usar `beginBatch()` / `endBatch()` `[undo-batch-operations]` (confidence: 0.95)
 
 > **44 rules · confidence 0.90**
-> **levels:** P6:legacy, P5:CLAUDE.md, P3:.taste/animation/index.md
+> **levels:** P3:.taste/animation/index.md
 
 ---
 
@@ -503,7 +503,7 @@ Para operaciones múltiples, usar `beginBatch()` / `endBatch()` `[undo-batch-ope
 - **rationale:** Los tokens viven en Figma como fuente de diseño, el código consume la versión build `[rationale-tokens-in-figma]` (confidence: 0.90)
 
 > **8 rules · confidence 0.90**
-> **levels:** P6:legacy, P5:CLAUDE.md, P3:.taste/design/index.md
+> **levels:** P3:.taste/design/index.md
 
 ---
 
@@ -632,7 +632,7 @@ fetch('/api/projects', { method: 'POST', body: JSON.stringify(data) });
 `[patron-save-project]` (confidence: 0.95)
 
 > **51 rules · confidence 0.70**
-> **levels:** P6:legacy, P5:CLAUDE.md, P3:.taste/skills/index.md
+> **levels:** P3:.taste/skills/index.md
 
 ---
 
@@ -793,4 +793,4 @@ fetch('/api/projects', { method: 'POST', body: JSON.stringify(data) });
 - **rationale:** Los slugs son el identificador único de cada regla; mantenerlos legibles y consistentes evita duplicados y confusión en compilación y override matching (confidence: 0.90)
 
 > **74 rules · confidence 0.75**
-> **levels:** P6:legacy, P5:CLAUDE.md, P3:.taste/tools/index.md, P1:settings.local.json
+> **levels:** P3:.taste/tools/index.md, P1:settings.local.json

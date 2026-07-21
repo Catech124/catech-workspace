@@ -3,6 +3,12 @@
 ## Git — never auto-commit
 Do NOT run `git commit` or `git push` unless the human explicitly asks. List what changed and stop.
 
+## Basher — raw output preference
+
+When Freebuff invokes `basher`, it MUST NOT use `what_to_summarize` unless the task explicitly asks for a summary or analysis of the output. Most tasks require the raw, exact output of the command (file listings, sizes, search results, etc.), and `what_to_summarize` introduces an LLM pass that can hallucinate, truncate, or paraphrase critical details.
+
+**Default behavior:** Always call `basher` with just `command`. Only add `what_to_summarize` when the parent explicitly requests interpretation, not raw data.
+
 ## Roles de agentes — Planificador vs Implementador
 
 Cuando el usuario te mencione como **"planificador"** o **"implementador"**, debes leer el archivo de reglas correspondiente y comportarte según ese rol.
@@ -69,7 +75,7 @@ El sistema tiene herramientas instaladas para buscar archivos al instante:
 ```bash
 # Buscar archivos por nombre (usar ruta completa para evitar el fd roto de Windows)
 ~/scripts/fd '.md$' ~
-~/scripts/fd -t f '.ts$' ~/freebuff-modified
+~/scripts/fd -t f '.ts$' ~/tastedesign/src
 ~/scripts/fd --changed-within 24h '.md$' ~
 ~/scripts/fd 'transcribe' /mnt/c/Users/catec/
 
@@ -264,16 +270,32 @@ Este archivo contiene el inventario completo de dependencias verificadas. Úsalo
 
 **Path:** `/mnt/c/Users/catec/agent-dashboard`
 
+> ⚠️ **Usage scope:** These subagents are designed for AI agents (Freebuff, ChatGPT, Claude, etc.) and for the Freebuff orchestration system, NOT for direct use by the human user. The orchestrator, daemons, and IPC file protocols assume an AI agent as the caller. Manual invocation from the terminal may work but is not the intended use case and may produce unexpected behavior.
+
+**Architecture:** Windows-only subagents.
+
 **Architecture:** Windows-only subagents. The orchestrator runs from WSL2 but dispatches all work to Windows via SSH. The Linux/WSL subagents have been removed.
 
 ### Before running — pre-flight SSH check (MANDATORY, 5s)
 ```bash
-# Key must have correct permissions, then test SSH tunnel:
+# The key is already in use by ~/.ssh/config; verify permissions:
 chmod 600 ~/.ssh/id_ed25519_vm 2>/dev/null
 ssh windows echo ok
 ```
 If `Permission denied` → `chmod 600 ~/.ssh/id_ed25519_vm` and retry.
 If `Connection refused` → the SSH tunnel to Windows is down. Tell the user.
+
+> 📌 **Contenido actual de `~/.ssh/config`:**
+> ```
+> Host windows
+>     HostName localhost
+>     User catec
+>     IdentityFile ~/.ssh/id_ed25519_vm
+>     StrictHostKeyChecking no
+>     ConnectTimeout 5
+> ```
+> La clave `~/.ssh/tailscale_vm` es un **symlink** a `~/.freebuff-account4/.ssh/tailscale_vm`.
+> La clave real que usa SSH es `~/.ssh/id_ed25519_vm`.
 
 ### Quick commands
 ```bash
@@ -292,6 +314,17 @@ python3 subagent-orchestrator.py --provider claude --rotate --prompt "..."
 python3 subagent-orchestrator.py --status --provider claude
 ```
 
+### Cuentas freebuff (aisladas)
+
+| Script | Cuenta | Usuario | Email |
+|---|---|---|---|
+| `freebuff2` | Cuenta 1 | cadavan | cadavan128@gmail.com |
+| `freebuff` | Cuenta 2 | reyada124 | reyada124@gmail.com |
+| `freebuff3` | Cuenta 3 | reyada125 | — |
+| `freebuff4` | Cuenta 4 | catechnew8 | catechnew8@gmail.com |
+
+Cada cuenta tiene su propio HOME aislado en `~/.freebuff-account{N}/` para evitar el singleton check de freebuff.
+
 ### Providers: claude, chatgpt, gemini, deepseek, kimi, chatglm
 All use `--account 1` (or 2, 3). All 3 accounts active. Sessions expire ~7 days. No cooldowns.
 
@@ -299,6 +332,32 @@ All use `--account 1` (or 2, 3). All 3 accounts active. Sessions expire ~7 days.
 - No parallelism (shared chromedriver)
 - No images via SSH
 - Quotes around multi-word prompts
+
+### Daemon lifecycle — IMPORTANTE
+
+Los daemons de los subagentes se crearon para **uso temporal y eficiente**: un AI agent abre un daemon, hace sus preguntas o auditoría, y **cierra el daemon inmediatamente al terminar**.
+
+**REGLAS ESTRICTAS:**
+- ❌ **NUNCA** dejar daemons abiertos si no se están usando activamente
+- ❌ **NUNCA** abrir daemons "por si acaso" — solo cuando un AI agent los necesita para una tarea concreta
+- ✅ Abrir daemon → hacer la consulta → cerrar daemon
+- 💡 Los daemons consumen recursos: cada uno mantiene un Chrome abierto (~200-300 MB RAM) en Windows
+
+El flujo correcto desde un AI agent:
+```bash
+# 1. Iniciar daemon y enviar prompt (se abre Chrome, se hace la consulta)
+python3 subagent-orchestrator.py --provider claude --daemon --prompt "..."
+
+# 2. Cerrar el daemon INMEDIATAMENTE después de la consulta:
+#    Escribir {"action":"close"} en la queue del daemon:
+echo '{"action":"close"}' > /mnt/c/Users/catec/AppData/Local/Temp/queue-claude-acct1.txt
+
+# 3. Si el daemon no responde (solo como último recurso):
+ssh windows "taskkill /F /IM python.exe 2>nul"
+```
+
+> ⚠️ `taskkill /F /IM python.exe` mata **todos** los procesos Python en Windows, no solo el daemon. Úsalo solo como último recurso. Prefiere siempre el cierre vía queue (`{"action":"close"}`) que es limpio y específico.
+> 🔴 Nunca uses `taskkill /F /IM chrome.exe` — mataría TODAS las ventanas de Chrome (navegación normal incluida).
 
 ### If it fails
 - `AUTH_REQUIRED` → re-login on Windows: `python login-survey-win.py --provider claude --account 1`
